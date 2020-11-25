@@ -38,25 +38,6 @@ int binary_tree_balance(const binary_tree_t *tree)
 	height_right = binary_tree_height(tree->right);
 	return (height_left - height_right);
 }
-/**
- * binary_tree_is_full - checks if a binary tree is full
- * @tree: pointer to the root node of the tree to check
- *
- * Return: 1 if binary tree is full, 0 otherwise.
- */
-int binary_tree_is_full(const binary_tree_t *tree)
-{
-	int check_left = 0;
-	int check_right = 0;
-
-	if (tree == NULL)
-		return (0);
-	if (tree->left == NULL && tree->right == NULL)
-		return (1);
-	check_left = binary_tree_is_full(tree->left);
-	check_right = binary_tree_is_full(tree->right);
-	return (check_left * check_right);
-}
 
 /**
  * binary_tree_is_perfect - checks if a binary tree is perfect
@@ -66,12 +47,20 @@ int binary_tree_is_full(const binary_tree_t *tree)
  */
 int binary_tree_is_perfect(const binary_tree_t *tree)
 {
-	int balance = 0;
-	int is_full = 0;
-
-	balance = binary_tree_balance(tree);
-	is_full = binary_tree_is_full(tree);
-	if (balance == 0 && is_full == 1)
+	if (tree == NULL || (binary_tree_balance(tree) != 0))
+		return (0);
+	if (tree->left == NULL && tree->right == NULL)
 		return (1);
+	if (binary_tree_balance(tree) == 0)
+	{
+		if (
+			binary_tree_is_perfect(tree->left)
+			&& binary_tree_is_perfect(tree->right)
+		)
+		{
+			return (1);
+		}
+	}
 	return (0);
+
 }
